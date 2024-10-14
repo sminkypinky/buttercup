@@ -18,7 +18,7 @@ CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
 
 SPOTIFY_CLIENT_ID = '0568b723e6134b0fa22bab9c9e126e00'
 SPOTIFY_CLIENT_SECRET = 'c65862a621af40e5bf70c7d3c6c33109'
-SPOTIFY_REDIRECT_URI = 'http://localhost:5000/callback'
+SPOTIFY_REDIRECT_URI = 'https://buttercup-bfa5ac5c72f8.herokuapp.com/callback'
 
 @app.route('/')
 def index():
