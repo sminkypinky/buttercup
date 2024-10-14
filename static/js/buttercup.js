@@ -347,7 +347,7 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('payment') === 'success') {
     document.getElementById('submit-btn').classList.remove('hidden');
-    document.getElementById('generateButton').classList.add('hidden');
+    document.getElementById('payments').classList.add('hidden');
   }
 
 document.querySelector('.modal-close').addEventListener('click', function() {
