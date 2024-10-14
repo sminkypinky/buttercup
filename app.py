@@ -82,7 +82,13 @@ Example format:
   ...
 ]
 
-Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}, while considering their preference for {genre} music. The songs should be listed in chronological order by the year of release, from earliest to latest, but not exceeding the current year {current_year}. Try and list at least 20 songs."""
+Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}, while considering their preference for {genre} music. 
+
+The songs should be listed in chronological order by the year of release, from earliest to latest, but not exceeding the current year {current_year}. 
+
+List between 15 and 20 songs.
+
+Only output JSON with no whitespace."""
 
     if not CLAUDE_API_KEY:
         logger.error("Claude API key is missing")
@@ -95,7 +101,7 @@ Ensure the playlist is diverse in genres and eras, reflecting the person's life 
     }
 
     payload = {
-        'model': 'claude-3-opus-20240229',
+        'model': 'claude-3-5-sonnet-20240620',
         'max_tokens': 1000,
         'messages': [
             {'role': 'user', 'content': prompt}
