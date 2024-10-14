@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Authorization Callback</title>
+</head>
+<body>
+    <h1>Authorization Successful</h1>
+    <p>You can close this window now.</p>
+    <script>
+        window.opener.postMessage({ type: 'SPOTIFY_AUTH_SUCCESS', code: '{{ code }}' }, '*');
+    </script>
+</body>
+</html>
