@@ -35,6 +35,7 @@ def generate_playlist():
     birth_month = data['birthMonth']
     birth_year = data['birthYear']
     country = data['country']
+    genre = data['genre']
 
     # Get the current year
     current_year = datetime.now().year
@@ -42,7 +43,7 @@ def generate_playlist():
     # Construct the date of birth string
     dob = f"{birth_year}-{birth_month}-01"  # Using the first day of the month
 
-    prompt = f"""Given the birth date {dob} and country {country}, generate a playlist of popular songs that are significant to the person's life:
+    prompt = f"""Given the birth date {dob}, country {country}, and preferred genre {genre}, generate a playlist of popular songs that are significant to the person's life:
 
 1. Songs from the year they turned 13 (coming of age)
 2. Songs from the year they turned 18 (legal adulthood in many countries)
@@ -60,6 +61,7 @@ Important constraints:
 - Do not include any songs released after the current year ({current_year}).
 - If the person hasn't reached a certain age milestone yet, skip that entry.
 - Ensure all songs in the playlist were released between the person's birth year and the current year, inclusive.
+- Try to include songs from the preferred genre ({genre}) when possible, but also include other genres for variety and to match significant events.
 
 For each song, provide the following information in a structured format:
 - Year of release
@@ -80,7 +82,7 @@ Example format:
   ...
 ]
 
-Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}. The songs should be listed in chronological order by the year of release, from earliest to latest, but not exceeding the current year {current_year}."""
+Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}, while considering their preference for {genre} music. The songs should be listed in chronological order by the year of release, from earliest to latest, but not exceeding the current year {current_year}. Try and list at least 20 songs."""
 
     if not CLAUDE_API_KEY:
         logger.error("Claude API key is missing")

@@ -149,12 +149,13 @@
         <p class="text-lg text-center mb-6">Your Personal Playlist Generator</p>
         
         <div class="mb-8 text-gray-700">
-            <p class="mb-4">Welcome to Buttercup, your nostalgic journey through music! Here's how it works:</p>
+            <p class="mb-4">Want to help a loved one living with dementia to discover songs from significant periods in their lives?</p>
+            <p class="mb-4">Welcome to Buttercup, your dementia playlist generator! Here's how it works:</p>
             <ol class="list-decimal pl-6 space-y-2">
-                <li>Enter your birth month, year, and country of origin.</li>
-                <li>Buttercup will craft a personalized playlist that reflects your life's musical journey.</li>
-                <li>Discover songs from significant years in your life
-                <li>Explore tunes tied to global events, your school years, and more!</li>
+                <li>Enter the birth month, year, country of origin and optional preferred genre.</li>
+                <li>Buttercup will craft a personalized playlist that reflects their life's musical journey.</li>
+                <li>Discover songs from significant years in thier life
+                <li>Explore tunes tied to global events, school years, and more!</li>
             </ol>
             <p class="mt-4">Get ready to relive your memories through the power of music. Let's create your unique soundtrack!</p>
         </div>
@@ -190,6 +191,22 @@
                     <select id="country" name="country" required class="form-select">
                         <option value="United Kingdom">United Kingdom</option>
                     </select>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="genre" class="block mb-2">Genre:</label>
+                    <select id="genre" class="w-full p-2 border rounded">
+                        <option value="Any">Any</option>
+                        <option value="Pop">Pop</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Hip Hop">Hip Hop</option>
+                        <option value="R&B">R&B</option>
+                        <option value="Country">Country</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Jazz">Jazz</option>
+                        <option value="Classical">Classical</option>
+                        <option value="other">Other (Type your own)</option>
+                    </select>
+                    <input type="text" id="customGenre" class="w-full p-2 border rounded mt-2 hidden" placeholder="Enter custom genre">
                 </div>
                 <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:shadow-none">
                     Generate My Playlist
@@ -264,7 +281,9 @@
                 const birthMonth = document.getElementById('birth-month').value;
                 const birthYear = document.getElementById('birth-year').value;
                 const country = document.getElementById('country').value;
-                await generatePlaylist(birthMonth, birthYear, country);
+                const genre = document.getElementById('genre').value;
+                if (genre === 'other') genre = document.getElementById('customGenre').value;
+                await generatePlaylist(birthMonth, birthYear, country, genre);
             }
         });
 
@@ -388,6 +407,8 @@
             localStorage.setItem('birthMonth', document.getElementById('birth-month').value);
             localStorage.setItem('birthYear', document.getElementById('birth-year').value);
             localStorage.setItem('country', document.getElementById('country').value);
+            localStorage.setItem('genre', document.getElementById('genre').value);
+            localStorage.setItem('customGenre', document.getElementById('customGenre').value);
         }
 
         // Function to load form data from localStorage
@@ -395,10 +416,14 @@
             const birthMonth = localStorage.getItem('birthMonth');
             const birthYear = localStorage.getItem('birthYear');
             const country = localStorage.getItem('country');
-
+            const genre = localStorage.getItem('genre');
+            const customGenre = localStorage.getItem('customGenre');
+        
             if (birthMonth) document.getElementById('birth-month').value = birthMonth;
             if (birthYear) document.getElementById('birth-year').value = birthYear;
             if (country) document.getElementById('country').value = country;
+            if (genre) document.getElementById('genre').value = genre;
+            if (customGenre) document.getElementById('customGenre').value = customGenre;
         }
 
         // Load saved data and playlist when the page loads
@@ -409,6 +434,17 @@
                 generatedPlaylist = savedPlaylist;
                 displayPlaylist(generatedPlaylist);
             }
+
+            const genreSelect = document.getElementById('genre');
+            const customGenreInput = document.getElementById('customGenre');
+            genreSelect.addEventListener('change', function() {
+                if (this.value === 'other') {
+                    customGenreInput.classList.remove('hidden');
+                } else {
+                    customGenreInput.classList.add('hidden');
+                }
+               
+            });
         });
 
         // Function to save the generated playlist
@@ -440,7 +476,7 @@
         }
 
         // Function to handle playlist generation
-        async function generatePlaylist(birthMonth, birthYear, country) {
+        async function generatePlaylist(birthMonth, birthYear, country, genre) {
             const errorElement = document.getElementById('error');
 
             errorElement.classList.add('hidden');
@@ -456,7 +492,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ birthMonth, birthYear, country }),
+                    body: JSON.stringify({ birthMonth, birthYear, country, genre }),
                     signal: signal
                 });
 
@@ -488,7 +524,9 @@
                 const birthMonth = document.getElementById('birth-month').value;
                 const birthYear = document.getElementById('birth-year').value;
                 const country = document.getElementById('country').value;
-                await generatePlaylist(birthMonth, birthYear, country);
+                const genre = document.getElementById('genre').value;
+                if (genre === 'other') genre = document.getElementById('customGenre').value;
+                await generatePlaylist(birthMonth, birthYear, country, genre);
             }
         });
 
