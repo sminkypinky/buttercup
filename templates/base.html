@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Buttercup{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buttercup.css') }}">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col justify-between">
+    <main class="flex items-center justify-center flex-grow">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl m-8">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+    
+    <footer class="bg-gray-200 py-4 text-center">
+        <div class="container mx-auto px-4">
+            <nav class="mb-2">
+                <a href="{{ url_for('home') }}" class="text-indigo-600 hover:text-indigo-800 mx-2 transition duration-300">Home</a>
+                <a href="{{ url_for('about') }}" class="text-indigo-600 hover:text-indigo-800 mx-2 transition duration-300">About</a>
+                <a href="{{ url_for('privacy') }}" class="text-indigo-600 hover:text-indigo-800 mx-2 transition duration-300">Privacy Policy</a>
+                <a href="{{ url_for('terms') }}" class="text-indigo-600 hover:text-indigo-800 mx-2 transition duration-300">Terms of Service</a>
+            </nav>
+            <p class="text-gray-600">&copy; 2024 Buttercup. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
