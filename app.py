@@ -6,6 +6,11 @@ import json
 import re  # Add this import
 import base64
 from urllib.parse import urlencode
+from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -13,12 +18,12 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-CLAUDE_API_KEY = os.environ.get('CLAUDE_API_KEY')
-CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
+SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY')
+SPOTIFY_REDIRECT_URI = os.getenv('SPOTIFY_REDIRECT_URI')
 
-SPOTIFY_CLIENT_ID = '0568b723e6134b0fa22bab9c9e126e00'
-SPOTIFY_CLIENT_SECRET = 'c65862a621af40e5bf70c7d3c6c33109'
-SPOTIFY_REDIRECT_URI = 'https://buttercup-bfa5ac5c72f8.herokuapp.com/callback'
+CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
 
 @app.route('/')
 def index():
@@ -30,6 +35,9 @@ def generate_playlist():
     birth_month = data['birthMonth']
     birth_year = data['birthYear']
     country = data['country']
+
+    # Get the current year
+    current_year = datetime.now().year
 
     # Construct the date of birth string
     dob = f"{birth_year}-{birth_month}-01"  # Using the first day of the month
@@ -47,6 +55,11 @@ def generate_playlist():
    - Cultural phenomena (movie releases, technology launches, etc.)
 7. Songs popular when they likely finished secondary school (around age 18)
 8. Songs popular when they likely finished university (around age 21-22)
+
+Important constraints:
+- Do not include any songs released after the current year ({current_year}).
+- If the person hasn't reached a certain age milestone yet, skip that entry.
+- Ensure all songs in the playlist were released between the person's birth year and the current year, inclusive.
 
 For each song, provide the following information in a structured format:
 - Year of release
@@ -67,7 +80,7 @@ Example format:
   ...
 ]
 
-Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}. The songs should be listed in chronological order by the year of release."""
+Ensure the playlist is diverse in genres and eras, reflecting the person's life journey and cultural context of {country}. The songs should be listed in chronological order by the year of release, from earliest to latest, but not exceeding the current year {current_year}."""
 
     if not CLAUDE_API_KEY:
         logger.error("Claude API key is missing")
@@ -215,6 +228,16 @@ def create_spotify_playlist():
         logger.error(f"Spotify API error: {str(e)}")
         logger.error(f"Response content: {e.response.text if e.response else 'N/A'}")
         return jsonify({'error': f'Spotify API error: {str(e)}'}), 500
+    
+@app.route('/get_spotify_auth_url')
+def get_spotify_auth_url():
+    if not SPOTIFY_CLIENT_ID:
+        return jsonify({'error': 'Spotify Client ID is not configured'}), 500
+
+    scope = 'playlist-modify-private'
+    auth_url = f'https://accounts.spotify.com/authorize?client_id={SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri={SPOTIFY_REDIRECT_URI}&scope={scope}&show_dialog=true'
+    
+    return jsonify({'authUrl': auth_url})
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

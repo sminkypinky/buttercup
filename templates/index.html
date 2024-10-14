@@ -274,54 +274,62 @@
                 return;
             }
 
-            const clientId = '0568b723e6134b0fa22bab9c9e126e00';
-            const redirectUri = 'https://buttercup-bfa5ac5c72f8.herokuapp.com/callback';
-            const scope = 'playlist-modify-private';
+            try {
+                const response = await fetch('/get_spotify_auth_url');
+                const data = await response.json();
+                
+                if (data.authUrl) {
+                    const authWindow = window.open(data.authUrl, 'Spotify Authorization', 'width=800,height=600');
+                    showModal('Authorizing with Spotify...');
 
-            const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&show_dialog=true`;
+                    window.addEventListener('message', async (event) => {
+                        if (event.origin !== window.location.origin) return;
 
-            const authWindow = window.open(authUrl, 'Spotify Authorization', 'width=800,height=600');
+                        if (event.data.type === 'SPOTIFY_AUTH_SUCCESS') {
+                            authWindow.close();
+                            const code = event.data.code;
 
-            showModal('Authorizing with Spotify...');
+                            updateModal('Creating playlist on Spotify...');
 
-            window.addEventListener('message', async (event) => {
-                if (event.origin !== window.location.origin) return;
+                            try {
+                                const response = await fetch('/create_spotify_playlist', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        code: code,
+                                        playlist: generatedPlaylist
+                                    }),
+                                });
 
-                if (event.data.type === 'SPOTIFY_AUTH_SUCCESS') {
-                    authWindow.close();
-                    const code = event.data.code;
+                                const data = await response.json();
 
-                    updateModal('Creating playlist on Spotify...');
-
-                    try {
-                        const response = await fetch('/create_spotify_playlist', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                code: code,
-                                playlist: generatedPlaylist
-                            }),
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok && data.success) {
-                            updateModal(`
-                                <p class="mb-4">${data.message}</p>
-                                <p class="mb-4">Your playlist is ready! Click the button below to open it in Spotify:</p>
-                                <a href="${data.playlistUrl}" target="_blank" class="spotify-button">Open in Spotify</a>
-                            `);
-                        } else {
-                            throw new Error(data.error || 'Failed to create Spotify playlist');
+                                if (response.ok && data.success) {
+                                    updateModal(`
+                                        <p class="mb-4">${data.message}</p>
+                                        <p class="mb-4">Your playlist is ready! Click the button below to open it in Spotify:</p>
+                                        <a href="${data.playlistUrl}" target="_blank" class="spotify-button">Open in Spotify</a>
+                                    `);
+                                } else {
+                                    throw new Error(data.error || 'Failed to create Spotify playlist');
+                                }
+                            } catch (error) {
+                                console.error('Error creating Spotify playlist:', error);
+                                updateModal(`Error creating Spotify playlist: ${error.message}`);
+                            }
+                        } else if (event.data.type === 'SPOTIFY_AUTH_ERROR') {
+                            console.error('Spotify authorization error:', event.data.error);
+                            updateModal(`Spotify authorization failed: ${event.data.error}`);
                         }
-                    } catch (error) {
-                        console.error('Error creating Spotify playlist:', error);
-                        updateModal(`Error creating Spotify playlist: ${error.message}`);
-                    }
+                    }, false);
+                } else {
+                    throw new Error('Failed to get Spotify authorization URL');
                 }
-            }, false);
+            } catch (error) {
+                console.error('Error initiating Spotify authorization:', error);
+                updateModal(`Error: ${error.message}`);
+            }
         });
 
         // Modal functions
