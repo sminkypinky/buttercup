@@ -70,6 +70,13 @@
             background-color: #1ed760;
         }
     </style>
+    <style>
+        @media (max-width: 640px) {
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
@@ -81,14 +88,7 @@
             <ol class="list-decimal pl-6 space-y-2">
                 <li>Enter your birth month, year, and country of origin.</li>
                 <li>Buttercup will craft a personalized playlist that reflects your life's musical journey.</li>
-                <li>Discover songs from significant years in your life, including when you:</li>
-                <ul class="list-disc pl-6 mt-2 space-y-1">
-                    <li>Turned 13 (coming of age)</li>
-                    <li>Reached 18 (legal adulthood)</li>
-                    <li>Celebrated your 21st (another milestone)</li>
-                    <li>Entered your 30s</li>
-                    <li>Hit the big 4-0</li>
-                </ul>
+                <li>Discover songs from significant years in your life
                 <li>Explore tunes tied to global events, your school years, and more!</li>
             </ol>
             <p class="mt-4">Get ready to relive your memories through the power of music. Let's create your unique soundtrack!</p>
@@ -123,10 +123,7 @@
                 <label for="country" class="block text-sm font-medium text-gray-700">Country:</label>
                 <select id="country" name="country" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <option value="United Kingdom">United Kingdom</option>
-                    <option value="Afghanistan">Afghanistan</option>
-                    <option value="Albania">Albania</option>
-                    <!-- Add more countries here -->
-                    <option value="Zimbabwe">Zimbabwe</option>
+                    <option value="United States of America">United States of America</option>
                 </select>
             </div>
             <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:shadow-none">
@@ -151,17 +148,16 @@
         <div id="result" class="mt-8 hidden">
             <h2 class="text-xl font-semibold mb-2">Your Personalized Playlist:</h2>
             <ul id="playlist" class="list-disc pl-5 space-y-2"></ul>
-            <div class="mt-4 space-x-2 playlist-buttons">
-                <button id="create-spotify-playlist" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hidden">
+            <div class="mt-4 flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                <button id="create-spotify-playlist" class="btn bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hidden">
                     Create Playlist on Spotify
                 </button>
-                <button id="regenerate-playlist" class="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                <button id="regenerate-playlist" class="btn bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
                     Re-generate Playlist
                 </button>
-                <button id="start-over" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                <button id="start-over" class="btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                     Start Again
                 </button>
-            </div>
             </div>
         </div>
         <div id="error" class="mt-4 text-red-600 hidden"></div>
@@ -366,7 +362,7 @@
                 playlistElement.appendChild(li);
             });
             document.getElementById('result').classList.remove('hidden');
-            document.getElementById('create-spotify-playlist').classList.remove('hidden');
+            showButtons();
         }
 
         // Function to handle playlist generation
@@ -439,19 +435,17 @@
         function showLoading() {
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('submit-btn').disabled = true;
-            document.querySelectorAll('.playlist-buttons button').forEach(btn => btn.classList.add('hidden'));
+            hideButtons();
             document.getElementById('cancel-generation').classList.remove('hidden');
             isGenerating = true;
-            updateSubmitButtonState(true);
         }
 
         function hideLoading() {
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('submit-btn').disabled = false;
-            document.querySelectorAll('.playlist-buttons button').forEach(btn => btn.classList.remove('hidden'));
+            showButtons();
             document.getElementById('cancel-generation').classList.add('hidden');
             isGenerating = false;
-            updateSubmitButtonState(false);
         }
 
         // Add event listener for the cancel button
@@ -471,6 +465,14 @@
             } else {
                 submitButton.textContent = 'Generate My Playlist';
             }
+        }
+
+        function showButtons() {
+            document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('hidden'));
+        }
+
+        function hideButtons() {
+            document.querySelectorAll('.btn').forEach(btn => btn.classList.add('hidden'));
         }
     </script>
 </body>
