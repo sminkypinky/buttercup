@@ -8,6 +8,7 @@ import base64
 from urllib.parse import urlencode
 from datetime import datetime
 from dotenv import load_dotenv
+import gocardless_pro
 
 # Load environment variables
 load_dotenv()
@@ -22,11 +23,19 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY')
 SPOTIFY_REDIRECT_URI = os.getenv('SPOTIFY_REDIRECT_URI')
+GOCARDLESS_ACCESS_TOKEN = os.getenv('GOCARDLESS_ACCESS_TOKEN')
+GOCARDLESS_ENVIRONMENT = os.getenv('GOCARDLESS_ENVIRONMENT', 'sandbox')
 
 CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
 
+# Initialize GoCardless client
+gocardless_client = gocardless_pro.Client(
+    access_token=GOCARDLESS_ACCESS_TOKEN,
+    environment=GOCARDLESS_ENVIRONMENT
+)
+
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
 
 @app.route('/generate_playlist', methods=['POST'])
@@ -246,6 +255,55 @@ def get_spotify_auth_url():
     auth_url = f'https://accounts.spotify.com/authorize?client_id={SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri={SPOTIFY_REDIRECT_URI}&scope={scope}&show_dialog=true'
     
     return jsonify({'authUrl': auth_url})
-    
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@app.route('/create_payment_session', methods=['GET'])
+def create_payment_session():
+    try:
+        billing_request = gocardless_client.billing_requests.create({
+            "payment_request": {
+                "amount": 299,
+                "currency": "GBP",
+                "description": "Buttercup Playlist Generation"
+            },
+            "fallback_enabled": True
+        })
+        
+        flow = gocardless_client.billing_request_flows.create({
+ 
+            "redirect_uri": request.url_root + "payment_success",
+            "exit_uri": request.url_root,
+            "links": {
+                "billing_request": billing_request.id
+            }
+        })
+        
+        return jsonify({"flow_id": flow.id, "redirect_url": flow.authorisation_url})
+    except Exception as e:
+        logger.error(f"Failed to create GoCardless session: {str(e)}")
+        return jsonify({"error": "Failed to create payment session"}), 500
+
+@app.route('/payment_success')
+def payment_success():
+    # Here you would typically verify the payment status with GoCardless
+    # For simplicity, we're assuming the payment was successful
+    return redirect('/?payment=success')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

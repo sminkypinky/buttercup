@@ -1,6 +1,7 @@
 let generatedPlaylist = null;
 let isGenerating = false;
 let controller = null;
+let paymentOK = false;
 
 document.getElementById('playlist-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -274,7 +275,7 @@ document.getElementById('start-over').addEventListener('click', () => {
 
 function showLoading() {
     document.getElementById('loading').classList.remove('hidden');
-    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('generateButton').disabled = true;
     hideButtons();
     document.getElementById('cancel-generation').classList.remove('hidden');
     isGenerating = true;
@@ -314,3 +315,41 @@ function showButtons() {
 function hideButtons() {
     document.querySelectorAll('.btn').forEach(btn => btn.classList.add('hidden'));
 }
+
+document.getElementById('generateButton').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    saveFormData();
+
+    controller = new AbortController();
+    const signal = controller.signal;
+
+    const response = await fetch('/create_payment_session', {
+        method: 'GET',
+        signal: signal
+    });
+
+    const data = await response.json();
+
+    if (data.redirect_url) {
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+        } else {
+            console.error('Failed to create payment session');
+          }
+    } else {
+        console.error('Failed to create payment session');
+    }
+      
+  });
+
+  // Check if the payment was successful
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('payment') === 'success') {
+    document.getElementById('submit-btn').classList.remove('hidden');
+    document.getElementById('generateButton').classList.add('hidden');
+  }
+
+document.querySelector('.modal-close').addEventListener('click', function() {
+    document.getElementById('paymentModal').classList.add('opacity-0', 'pointer-events-none');
+});

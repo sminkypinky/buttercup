@@ -1,94 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buttercup - Your Personal Playlist Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/buttercup.css') }}">
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
-        <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <g transform="translate(50 50)">
-                    <path d="M0,-30 C-20,-30 -30,-20 -30,0 C-30,20 -20,30 0,30 C20,30 30,20 30,0 C30,-20 20,-30 0,-30 Z" fill="#FFD700" />
-                    <circle cx="0" cy="0" r="10" fill="#8B4513" />
-                    <path d="M-3,-25 L0,-40 L3,-25 Z" fill="#008000" />
-                </g>
-            </svg>
-        </div>
-        <h1 class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup</h1>
-        <p class="text-lg text-center mb-6">Your Personal Playlist Generator</p>
-        
-        <div class="mb-8 text-gray-700">
-            <p class="mb-4">Want to help a loved one living with dementia to discover songs from significant periods in their lives?</p>
-            <p class="mb-4">Welcome to Buttercup, your dementia playlist generator! Here's how it works:</p>
-            <ol class="list-decimal pl-6 space-y-2">
-                <li>Enter the birth month, year, country of origin and optional preferred genre.</li>
-                <li>Buttercup will craft a personalized playlist that reflects their life's musical journey.</li>
-                <li>Discover songs from significant years in thier life
-                <li>Explore tunes tied to global events, school years, and more!</li>
-            </ol>
-            <p class="mt-4">Get ready to relive your memories through the power of music. Let's create your unique soundtrack!</p>
-        </div>
+{% extends "base.html" %}
 
-        <div class="form-container">
-            <form id="playlist-form" class="space-y-4">
-                <div class="flex flex-col sm:flex-row sm:space-x-4">
-                    <div class="form-group w-full sm:w-1/2">
-                        <label for="birth-month" class="form-label">Birth Month:</label>
-                        <select id="birth-month" name="birth-month" required class="form-select">
-                            <option value="">Select Month</option>
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                    <div class="form-group w-full sm:w-1/2">
-                        <label for="birth-year" class="form-label">Birth Year:</label>
-                        <input type="number" id="birth-year" name="birth-year" min="1900" max="2024" required class="form-input">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="country" class="form-label">Country:</label>
-                    <select id="country" name="country" required class="form-select">
-                        <option value="United Kingdom">United Kingdom</option>
-                    </select>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="genre" class="block mb-2">Genre:</label>
-                    <select id="genre" class="w-full p-2 border rounded">
-                        <option value="Any">Any</option>
-                        <option value="Pop">Pop</option>
-                        <option value="Rock">Rock</option>
-                        <option value="Hip Hop">Hip Hop</option>
-                        <option value="R&B">R&B</option>
-                        <option value="Country">Country</option>
-                        <option value="Electronic">Electronic</option>
-                        <option value="Jazz">Jazz</option>
-                        <option value="Classical">Classical</option>
-                        <option value="other">Other (Type your own)</option>
-                    </select>
-                    <input type="text" id="customGenre" class="w-full p-2 border rounded mt-2 hidden" placeholder="Enter custom genre">
-                </div>
-                <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:shadow-none">
-                    Generate My Playlist
-                </button>
-            </form>
-        </div>
-        <div id="loading" class="mt-8 text-center hidden">
-            <div class="inline-block animate-bounce-slow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="animate-sway">
+{% block title %}Buttercup - Your Personal Playlist Generator{% endblock %}
+
+{% block content %}
+        <div>
+            <div class="logo-container mb-6 flex justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                     <g transform="translate(50 50)">
                         <path d="M0,-30 C-20,-30 -30,-20 -30,0 C-30,20 -20,30 0,30 C20,30 30,20 30,0 C30,-20 20,-30 0,-30 Z" fill="#FFD700" />
                         <circle cx="0" cy="0" r="10" fill="#8B4513" />
@@ -96,51 +13,162 @@
                     </g>
                 </svg>
             </div>
-            <p id="loading-message" class="mt-4 text-lg font-semibold">Crafting your musical journey... Please wait.</p>
-            <button id="cancel-generation" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                Cancel Generation
-            </button>
-        </div>
-        <div id="result" class="mt-8 hidden">
-            <h2 class="text-xl font-semibold mb-2">Your Personalized Playlist:</h2>
-            <ul id="playlist" class="list-disc pl-5 space-y-2"></ul>
-            <div class="mt-4 flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-                <button id="create-spotify-playlist" class="btn bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hidden">
-                    Create Playlist on Spotify
-                </button>
-                <button id="regenerate-playlist" class="btn bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                    Re-generate Playlist
-                </button>
-                <button id="start-over" class="btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                    Start Again
+            <h1 id="buttercup" class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup</h1>
+            <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Rekindling Memories Through Music</h2>
+        
+            <div class="mb-8 text-gray-700">
+                <p class="mb-4">Have you ever seen a loved one's eyes light up at the sound of a familiar tune? For those living with dementia, music can be a powerful key to unlock cherished memories and emotions.</p>
+        
+                <p class="mb-4">Welcome to Buttercup, your compassionate companion in creating personalized playlists that can bring comfort, joy, and a sense of identity to your loved ones affected by dementia.</p>
+        
+                <p class="mb-4">Here's how Buttercup helps you create a musical journey of memories:</p>
+        
+                <ol class="list-decimal list-inside mb-4">
+                    <li>Enter your loved one's birth month, year, and country of origin.</li>
+                    <li>Optionally, specify their preferred music genre.</li>
+                    <li>Let Buttercup craft a tailored playlist that reflects the soundtrack of their life.</li>
+                    <li>Rediscover songs from pivotal years, cultural milestones, and personal experiences.</li>
+                    <li>Watch as familiar melodies spark connections and evoke emotions.</li>
+                </ol>
+        
+                <p class="mb-4">Every song has the power to transport us back in time. For someone with dementia, this musical time machine can be a source of comfort, a trigger for communication, and a bridge to their sense of self.</p>
+        
+                <p class="font-semibold">Join us in using the healing power of music to improve the quality of life for your loved ones. Let's create a playlist that speaks to their heart and soul.</p>
+            </div>
+
+            <div class="form-container">
+                <form id="playlist-form" class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:space-x-4">
+                        <div class="form-group w-full sm:w-1/2">
+                            <label for="birth-month" class="form-label">Birth Month:</label>
+                            <select id="birth-month" name="birth-month" required class="form-select">
+                                <option value="">Select Month</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group w-full sm:w-1/2">
+                            <label for="birth-year" class="form-label">Birth Year:</label>
+                            <input type="number" id="birth-year" name="birth-year" min="1900" max="2024" required class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country" class="form-label">Country:</label>
+                        <select id="country" name="country" required class="form-select">
+                            <option value="United Kingdom">United Kingdom</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="genre" class="block mb-2">Genre:</label>
+                        <select id="genre" class="w-full p-2 border rounded">
+                            <option value="Any">Any</option>
+                            <option value="Pop">Pop</option>
+                            <option value="Rock">Rock</option>
+                            <option value="Hip Hop">Hip Hop</option>
+                            <option value="R&B">R&B</option>
+                            <option value="Country">Country</option>
+                            <option value="Electronic">Electronic</option>
+                            <option value="Jazz">Jazz</option>
+                            <option value="Classical">Classical</option>
+                            <option value="other">Other (Type your own)</option>
+                        </select>
+                        <input type="text" id="customGenre" class="w-full p-2 border rounded mt-2 hidden" placeholder="Enter custom genre">
+                    </div>
+
+                        <button id="generateButton" type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                          Generate My Playlist (£2.99)
+                        </button>
+                        
+                        <button id="submit-btn" type="submit" class="hidden bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                            Generate My Playlist
+                        </button>
+
+                </form>
+            </div>
+            <div id="loading" class="mt-8 text-center hidden">
+                <div class="inline-block animate-bounce-slow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" class="animate-sway">
+                        <g transform="translate(50 50)">
+                            <path d="M0,-30 C-20,-30 -30,-20 -30,0 C-30,20 -20,30 0,30 C20,30 30,20 30,0 C30,-20 20,-30 0,-30 Z" fill="#FFD700" />
+                            <circle cx="0" cy="0" r="10" fill="#8B4513" />
+                            <path d="M-3,-25 L0,-40 L3,-25 Z" fill="#008000" />
+                        </g>
+                    </svg>
+                </div>
+                <p id="loading-message" class="mt-4 text-lg font-semibold">Crafting your musical journey... Please wait.</p>
+                <button id="cancel-generation" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    Cancel Generation
                 </button>
             </div>
-        </div>
-        <div id="error" class="mt-4 text-red-600 hidden"></div>
-    </div>
+            <div id="result" class="mt-8 hidden">
+                <h2 class="text-xl font-semibold mb-2">Your Personalized Playlist:</h2>
+                <ul id="playlist" class="list-disc pl-5 space-y-2"></ul>
+                <div class="mt-4 flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                    <button id="create-spotify-playlist" class="btn bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hidden">
+                        Create Playlist on Spotify
+                    </button>
+                    <button id="regenerate-playlist" class="btn bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                        Re-generate Playlist
+                    </button>
+                    <button id="start-over" class="btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Start Again
+                    </button>
+                </div>
+            </div>
 
-    <!-- Modal -->
-    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-        
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-            <div class="modal-content py-4 text-left px-6">
-                <div class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Spotify Playlist Creation</p>
-                    <div class="modal-close cursor-pointer z-50">
-                        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                        </svg>
+            <div id="error" class="mt-4 text-red-600 hidden"></div>
+            
+        </div>
+
+        <!-- Modal -->
+        <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+            
+            <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+                <div class="modal-content py-4 text-left px-6">
+                    <div class="flex justify-between items-center pb-3">
+                        <p class="text-2xl font-bold">Spotify Playlist Creation</p>
+                        <div class="modal-close cursor-pointer z-50">
+                            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="modal-content"></div>
+                    <div class="flex justify-end pt-2">
+                        <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">Close</button>
                     </div>
                 </div>
-                <div id="modal-content"></div>
-                <div class="flex justify-end pt-2">
-                    <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">Close</button>
-                </div>
             </div>
         </div>
-    </div>
-
+        <div id="paymentModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+            <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+            <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+              <div class="modal-content py-4 text-left px-6">
+                <div class="flex justify-between items-center pb-3">
+                  <p class="text-2xl font-bold">Payment</p>
+                  <div class="modal-close cursor-pointer z-50">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                      <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                    </svg>
+                  </div>
+                </div>
+                <p>Please complete the payment to generate your playlist.</p>
+                <div id="gocardless-container"></div>
+              </div>
+            </div>
+          </div>
+    
+          <script src="https://pay.gocardless.com/js/v1"></script>
     <script src="{{ url_for('static', filename='js/buttercup.js') }}"></script> 
-</body>
-</html>
+    {% endblock %}
