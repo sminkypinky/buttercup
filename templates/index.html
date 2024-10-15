@@ -5,13 +5,7 @@
 {% block content %}
         <div>
             <div class="logo-container mb-6 flex justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                    <g transform="translate(50 50)">
-                        <path d="M0,-30 C-20,-30 -30,-20 -30,0 C-30,20 -20,30 0,30 C20,30 30,20 30,0 C30,-20 20,-30 0,-30 Z" fill="#FFD700" />
-                        <circle cx="0" cy="0" r="10" fill="#8B4513" />
-                        <path d="M-3,-25 L0,-40 L3,-25 Z" fill="#008000" />
-                    </g>
-                </svg>
+                <img src="{{ url_for('static', filename='images/logo.svg') }}"/>
             </div>
             <h1 id="buttercup" class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup</h1>
             <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Rekindling Memories Through Music</h2>
