@@ -321,11 +321,17 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
 
     saveFormData();
 
+    const country = await getUserCountry();
+
     controller = new AbortController();
     const signal = controller.signal;
 
     const response = await fetch('/create_payment_session', {
-        method: 'GET',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ country }),
         signal: signal
     });
 
@@ -349,6 +355,34 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
     document.getElementById('submit-btn').classList.remove('hidden');
     document.getElementById('payments').classList.add('hidden');
   }
+
+  // Function to get user's country
+  async function getUserCountry() {
+    try {
+      const response = await axios.get('https://ipapi.co/json/');
+      return response.data.country_code;
+    } catch (error) {
+      console.error('Error fetching user country:', error);
+      return 'default';
+    }
+  }
+
+  // Function to update price display
+  async function updatePriceDisplay() {
+    const country = await getUserCountry();
+    try {
+      const response = await axios.get(`/get_price?country=${country}`);
+      document.getElementById('priceDisplay1').textContent = response.data.display;
+      document.getElementById('priceDisplay2').textContent = response.data.display;
+    } catch (error) {
+      console.error('Error fetching price:', error);
+      document.getElementById('priceDisplay1').textContent = '£2.99';
+      document.getElementById('priceDisplay2').textContent = '£2.99';
+    }
+  }
+
+  // Update price display when page loads
+  updatePriceDisplay();
 
 document.querySelector('.modal-close').addEventListener('click', function() {
     document.getElementById('paymentModal').classList.add('opacity-0', 'pointer-events-none');

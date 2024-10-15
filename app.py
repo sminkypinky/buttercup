@@ -34,6 +34,19 @@ gocardless_client = gocardless_pro.Client(
     environment=GOCARDLESS_ENVIRONMENT
 )
 
+# Define prices for different countries
+PRICES = {
+    'GB': {'amount': 100, 'currency': 'GBP', 'display': '£1'},
+    'US': {'amount': 100, 'currency': 'USD', 'display': '$1'},
+    'default': {'amount': 100, 'currency': 'GBP', 'display': '£1'}
+}
+
+@app.route('/get_price', methods=['GET'])
+def get_price():
+    country_code = request.args.get('country', 'default')
+    price_info = PRICES.get(country_code, PRICES['default'])
+    return jsonify(price_info)
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -272,20 +285,25 @@ def privacy():
 def terms():
     return render_template('terms.html')
 
-@app.route('/create_payment_session', methods=['GET'])
+@app.route('/create_payment_session', methods=['POST'])
 def create_payment_session():
     try:
+        country_code = request.json.get('country', 'default')
+        price_info = PRICES.get(country_code, PRICES['default'])
+     
         billing_request = gocardless_client.billing_requests.create({
             "payment_request": {
-                "amount": 299,
-                "currency": "GBP",
+                "amount": price_info['amount'],
+                "currency": price_info['currency'],
                 "description": "Buttercup Playlist Generation"
             },
             "fallback_enabled": True
         })
         
         flow = gocardless_client.billing_request_flows.create({
- 
+           
+            "lock_currency": True,
+         
             "redirect_uri": request.url_root + "payment_success",
             "exit_uri": request.url_root,
             "links": {
