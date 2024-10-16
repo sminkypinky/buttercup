@@ -5,7 +5,7 @@
 {% block content %}
         <div>
             <div class="logo-container mb-6 flex justify-center">
-                <img src="{{ url_for('static', filename='images/logo.svg') }}"/>
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}"/>
             </div>
             <h1 id="buttercup" class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup</h1>
             <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Rekindling Memories Through Music</h2>
@@ -84,7 +84,7 @@
                         <button id="generateButton" type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
                           Generate My Playlist (<span id="priceDisplay1">...</span>)
                         </button>
-                        <p class="mb-4">* <span id="priceDisplay2">...</span> gets unlimited playlists for this browser session.</p>
+                        <p class="mb-4">* <span id="priceDisplay2">...</span> gets unlimited playlists for this browser session. A portion of your payment will be donated to dementia charities.</p>
                     </div>    
                     <button id="submit-btn" type="submit" class="hidden bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
                         Generate My Playlist
