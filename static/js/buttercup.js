@@ -276,6 +276,7 @@ document.getElementById('start-over').addEventListener('click', () => {
 function showLoading() {
     document.getElementById('loading').classList.remove('hidden');
     document.getElementById('generateButton').disabled = true;
+    document.getElementById('generateButtonAd').disabled = true;
     hideButtons();
     document.getElementById('cancel-generation').classList.remove('hidden');
     isGenerating = true;
@@ -309,7 +310,7 @@ function updateSubmitButtonState(disabled) {
 }
 
 function showButtons() {
-    document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('hidden'));
+    document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('hidden'));
 }
 
 function hideButtons() {
@@ -354,6 +355,8 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
   if (urlParams.get('payment') === 'success') {
     document.getElementById('submit-btn').classList.remove('hidden');
     document.getElementById('payments').classList.add('hidden');
+    document.getElementById('regenerate-playlist').classList.remove('hidden');
+    
   }
 
   // Function to get user's country
@@ -387,3 +390,64 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
 document.querySelector('.modal-close').addEventListener('click', function() {
     document.getElementById('paymentModal').classList.add('opacity-0', 'pointer-events-none');
 });
+
+function showAd() {
+    (function(__htavim){
+    var d = document,
+        s = d.createElement('script'),
+        l = d.scripts[d.scripts.length - 1];
+    s.settings = __htavim || {};
+    s.src = "\/\/knownamount.com\/dzm.FWzydWGGlNt\/Pz3Fp\/vcbymFVSJ\/ZnDj0E1\/NnjTU\/3\/MwTaIu4MLqTHUI2\/NyTfcxxQMwjNkS";
+    s.referrerPolicy = 'no-referrer-when-downgrade';
+    s.async = true;
+    l.parentNode.insertBefore(s, l);
+    })();
+
+    // You might need to run this after a slight delay or when you're sure the ad has loaded
+    setTimeout(initializeVideoJSListener, 1000); // Adjust timeout as needed
+}
+
+// Function to initialize event listening on Video.js player
+function initializeVideoJSListener() {
+    // HilltopAds might create the Video.js player with a specific ID or class
+    // You may need to adjust this selector
+    const playerElement = document.querySelector('.video-js');
+    
+    if (playerElement && window.videojs) {
+        const player = videojs(playerElement);
+
+        // Listen for the 'ended' event
+        player.on('ended', function() {
+            console.log('HilltopAds video ad has ended');
+            // Your code to handle the ad ending goes here
+            // For example, you might want to show some content or remove the ad container
+            document.getElementById('submit-btn').click();
+        });
+
+        // You might also want to listen for other events
+        player.on('play', function() {
+            console.log('HilltopAds video ad started playing');
+        });
+
+        player.on('pause', function() {
+            console.log('HilltopAds video ad was paused');
+        });
+
+        // If you need to check the current state
+        if (player.ended()) {
+            console.log('HilltopAds video ad has already ended');
+            // Handle case where video has already ended
+        }
+    } else {
+        console.log('Video.js player not found or Video.js library not loaded');
+    }
+}
+
+document.getElementById('generateButtonAd').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    saveFormData();
+
+    showAd();
+      
+  });
