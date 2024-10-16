@@ -286,6 +286,8 @@ function showLoading() {
 function hideLoading() {
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('submit-btn').disabled = false;
+    document.getElementById('generateButton').disabled = false;
+    document.getElementById('generateButtonAd').disabled = false;
     showButtons();
     document.getElementById('cancel-generation').classList.add('hidden');
     isGenerating = false;
@@ -445,6 +447,7 @@ function initializeVideoJSListener() {
 }
 
 document.getElementById('generateButtonAd').addEventListener('click', async (e) => {
+
     e.preventDefault();
 
     saveFormData();
