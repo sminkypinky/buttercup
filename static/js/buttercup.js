@@ -355,11 +355,12 @@ document.getElementById('generateButton').addEventListener('click', async (e) =>
 
   // Check if the payment was successful
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('payment') === 'success') {
+  const paid = localStorage.getItem('paid');
+  if (urlParams.get('payment') === 'success' || paid === 'yes') {
     document.getElementById('submit-btn').classList.remove('hidden');
     document.getElementById('payments').classList.add('hidden');
     document.getElementById('regenerate-playlist').classList.remove('hidden');
-    
+    localStorage.setItem('paid', 'yes');
   }
 
   // Function to get user's country
