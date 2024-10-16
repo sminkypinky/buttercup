@@ -78,6 +78,7 @@ def generate_playlist():
    - Cultural phenomena (movie releases, technology launches, etc.)
 7. Songs popular when they likely finished secondary school (around age 18)
 8. Songs popular when they likely finished university (around age 21-22)
+9. Theme tunes of popular TV shows when they were aged 10-30 - always include at least 1 of these
 
 Important constraints:
 - Do not include any songs released after the current year ({current_year}).

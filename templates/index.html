@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Buttercup - Your Personal Playlist Generator{% endblock %}
+{% block title %}Buttercup: Create Personalized Dementia Playlists | Music Therapy Tool{% endblock %}
 
 {% block content %}
         <div>
             <div class="logo-container mb-6 flex justify-center">
-                <img src="{{ url_for('static', filename='images/logo.jpg') }}"/>
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Buttercup Dementia Playlist Generator Logo">
             </div>
-            <h1 id="buttercup" class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup</h1>
+            <h1 id="buttercup" class="text-3xl font-bold mb-4 text-center text-indigo-600">Buttercup: Personalized Dementia Playlists Generator</h1>
+           
             <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Rekindling Memories Through Music</h2>
         
             <div class="mb-8 text-gray-700">
@@ -15,6 +16,19 @@
         
                 <p class="mb-4">Welcome to Buttercup, your compassionate companion in creating personalized playlists that can bring comfort, joy, and a sense of identity to your loved ones affected by dementia.</p>
         
+                <section class="mb-8 text-gray-700">
+                    <h2 class="text-2xl font-semibold mb-4">The Power of Music for Dementia Patients</h2>
+                    <p>Research has shown that personalized playlists can have significant benefits for individuals with dementia:</p>
+                    <ul class="list-disc pl-5 mt-2">
+                      <li>Improve mood and reduce anxiety</li>
+                      <li>Enhance cognitive function and memory recall</li>
+                      <li>Increase social interaction and communication</li>
+                      <li>Reduce reliance on anti-psychotic medications</li>
+                      <li>Provide a sense of identity and connection to past experiences</li>
+                    </ul>
+                    <p class="mt-4">Buttercup helps you harness these benefits by creating tailored dementia playlists that resonate with your loved one's personal history and preferences.</p>
+                  </section>
+
                 <p class="mb-4">Here's how Buttercup helps you create a musical journey of memories:</p>
         
                 <ol class="list-decimal list-inside mb-4">
@@ -29,6 +43,7 @@
         
                 <p class="font-semibold">Join us in using the healing power of music to improve the quality of life for your loved ones. Let's create a playlist that speaks to their heart and soul.</p>
             </div>
+
 
             <div class="form-container">
                 <form id="playlist-form" class="space-y-4">
