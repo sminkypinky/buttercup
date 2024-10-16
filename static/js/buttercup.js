@@ -280,6 +280,7 @@ function showLoading() {
     hideButtons();
     document.getElementById('cancel-generation').classList.remove('hidden');
     isGenerating = true;
+    document.getElementById('loading').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function hideLoading() {
