@@ -37,8 +37,8 @@ gocardless_client = gocardless_pro.Client(
 # Define prices for different countries
 PRICES = {
     'GB': {'amount': 100, 'currency': 'GBP', 'display': '£1'},
-    'US': {'amount': 100, 'currency': 'USD', 'display': '$1'},
-    'default': {'amount': 100, 'currency': 'GBP', 'display': '£1'}
+    'US': {'amount': 200, 'currency': 'USD', 'display': '$2'},
+    'default': {'amount': 00, 'currency': 'GBP', 'display': '£1'}
 }
 
 @app.route('/get_price', methods=['GET'])
