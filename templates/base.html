@@ -9,20 +9,25 @@
     <meta name="236539671a11b1cc0eba23f2c19102f7994b0670" content="236539671a11b1cc0eba23f2c19102f7994b0670" />
     <meta name="description" content="Create personalized dementia playlists with Buttercup. Our tool helps you craft musical journeys to rekindle memories and improve quality of life for loved ones with dementia.">
     <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "name": "Buttercup Dementia Playlist Generator",
-          "description": "Create personalized playlists to help individuals with dementia reconnect with their memories through music.",
-          "url": "https://www.dementiaplaylist.co.uk",
-          "applicationCategory": "HealthApplication",
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-          }
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Buttercup Dementia Playlist Generator",
+        "description": "Create personalized playlists to help individuals with dementia reconnect with their memories through music.",
+        "url": "https://www.dementiaplaylist.co.uk",
+        "applicationCategory": "HealthApplication",
+        "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
         }
-        </script>
+    }
+    </script>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicons/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicons/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicons/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicons/site.webmanifest') }}">
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col justify-between">
     <main class="flex items-center justify-center flex-grow">
